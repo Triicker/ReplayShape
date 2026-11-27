@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Replay Shape · Admin</title>
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/admin/assets/admin.css">
+  <script type="module" src="/admin/assets/admin.js"></script>
+</head>
+<body>
+  <div id="demo-banner" class="banner" hidden>MODO DEMONSTRAÇÃO — pagamentos simulados, câmeras sintéticas.</div>
+  <div id="login" class="login" hidden>
+    <form id="login-form" class="card login-card">
+      <div class="logo"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#a3e635"/><path d="M16 12.5v15l12-7.5z" fill="#0d1a08"/></svg><span>REPLAY SHAPE<br><small>Painel administrativo</small></span></div>
+      <label>E-mail<input id="email" type="email" autocomplete="username" required></label>
+      <label>Senha<input id="password" type="password" autocomplete="current-password" required></label>
+      <button class="btn primary" type="submit">Entrar</button>
+      <p class="hint">Primeiro acesso local: a senha inicial é gerada em <code>data/ADMIN_INITIAL_PASSWORD.txt</code>.</p>
+      <p id="login-error" class="error" hidden></p>
+    </form>
+  </div>
+  <div id="shell" class="shell" hidden>
+    <aside class="side">
+      <div class="logo"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#a3e635"/><path d="M16 12.5v15l12-7.5z" fill="#0d1a08"/></svg><span>REPLAY<br>SHAPE</span></div>
+      <nav id="nav">
+        <a data-tab="dashboard">Dashboard</a>
+        <a data-tab="orders">Pedidos</a>
+        <a data-tab="cameras">Câmeras</a>
+        <a data-tab="establishments">Estabelecimentos</a>
+        <a data-tab="devices">Botões físicos</a>
+        <a data-tab="settings">Configurações</a>
+        <a data-tab="simulator">Simulador financeiro</a>
+        <a data-tab="audit">Auditoria</a>
+      </nav>
+      <div class="me"><span id="me-email"></span><button id="logout" class="btn small">Sair</button></div>
+    </aside>
+    <main id="view" class="view"></main>
+  </div>
+  <div id="modal" class="modal" hidden><div class="card modal-card" id="modal-body"></div></div>
+</body>
+</html>
