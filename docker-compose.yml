@@ -1,0 +1,18 @@
+# Replay Shape — implantação (Cenário A/B). Edge + Cloud no mesmo contêiner durante o MVP.
+# Configure .env (copie de .env.example). Em produção, coloque um proxy HTTPS na frente.
+services:
+  replayshape:
+    build: .
+    image: replayshape:latest
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "127.0.0.1:8000:8000"   # exponha publicamente apenas via proxy HTTPS / túnel
+    volumes:
+      - replay-data:/app/data
+    # O contêiner precisa alcançar as câmeras da rede local (RTSP). Em Linux,
+    # "network_mode: host" é a opção mais simples; neste caso remova "ports".
+    # network_mode: host
+
+volumes:
+  replay-data:
