@@ -101,8 +101,15 @@ class SegmentRingBuffer:
         self.restarts = 0
         self.state = "stopped"
         self.last_error = ""
+        # Durações recentes dos segmentos: com GOP longo (ex.: H.265+ em DVRs) os
+        # segmentos ficam maiores que segment_seconds e os tempos de espera se adaptam.
+        self._recent_durations: deque = deque(maxlen=20)
 
     # --- ciclo de vida ---------------------------------------------------
+    @property
+    def longest_recent_segment(self) -> float:
+        return max(self._recent_durations, default=float(self.segment_seconds))
+
     @property
     def buffer_seconds(self) -> float:
         b = self._buffer_seconds
@@ -200,8 +207,8 @@ class SegmentRingBuffer:
             stderr_tail: deque[str] = deque(maxlen=20)
             threading.Thread(target=_drain, args=(proc, stderr_tail), daemon=True).start()
             got_any = False
-            watchdog = max(12.0, self.segment_seconds * 5.0)
             while not self._stop.is_set():
+                watchdog = max(12.0, self.segment_seconds * 5.0, self.longest_recent_segment * 3.0)
                 n = self._poll_list(run)
                 if n:
                     got_any = True
@@ -260,6 +267,8 @@ class SegmentRingBuffer:
                 ))
                 self._cond.notify_all()
             run.last_segment_at = observed
+            if rel_end > rel_start:
+                self._recent_durations.append(rel_end - rel_start)
             added += 1
         return added
 
@@ -281,8 +290,10 @@ class SegmentRingBuffer:
                        tolerance: float = 1.0, max_gap: float = 0.6) -> list[Segment]:
         """Retorna (com lock) os segmentos que cobrem [start, end].
 
-        Espera até `wait_timeout` o segmento que contém `end` ser finalizado.
+        Espera até `wait_timeout` o segmento que contém `end` ser finalizado
+        (ampliado automaticamente quando os segmentos da câmera são longos).
         """
+        wait_timeout = max(wait_timeout, self.longest_recent_segment * 2.0 + 2.0)
         deadline = time.time() + wait_timeout
         with self._cond:
             while True:
