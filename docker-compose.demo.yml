@@ -1,0 +1,21 @@
+# Modo demonstração: sem câmeras reais, sem Mercado Pago, sem serviços externos.
+#   docker compose -f docker-compose.demo.yml up --build
+# Acesse http://localhost:8000 (público) e http://localhost:8000/admin (painel).
+# Senha inicial do admin: docker compose -f docker-compose.demo.yml exec replayshape cat /app/data/ADMIN_INITIAL_PASSWORD.txt
+services:
+  replayshape:
+    build: .
+    image: replayshape:latest
+    environment:
+      RS_ENV: development
+      RS_DEMO_MODE: "true"
+      RS_PAYMENT_PROVIDER: mock
+      RS_STORAGE_BACKEND: local
+      RS_PUBLIC_BASE_URL: http://localhost:8000
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - replay-demo-data:/app/data
+
+volumes:
+  replay-demo-data:
