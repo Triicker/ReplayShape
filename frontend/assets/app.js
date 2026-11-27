@@ -421,6 +421,9 @@ function route() {
   } else if (cfg.demo_mode) {
     ribbon.textContent = 'MODO DEMONSTRAÇÃO — câmera simulada e pagamento fictício. Nenhum valor é cobrado.';
     ribbon.hidden = false;
+  } else if (cfg.simulated_payments) {
+    ribbon.textContent = 'PILOTO — câmera real com pagamento de teste. Nenhum valor é cobrado.';
+    ribbon.hidden = false;
   }
   route();
 })();
