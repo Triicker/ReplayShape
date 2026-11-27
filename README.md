@@ -15,6 +15,13 @@ Câmera gravando → Botão → Últimos 60 s → MP4 → Pix → Confirmação 
 > como adaptadores. Elas **não foram validadas** com equipamentos nem credenciais reais.
 > Veja [docs/TEST_REPORT.md](docs/TEST_REPORT.md).
 
+## Piloto com câmera real (Windows)
+
+Para testar com o DVR ou a câmera do estabelecimento, sem cobrança real: **`instalar.bat` →
+`configurar_camera.bat` → `iniciar_piloto.bat`**. O passo a passo está em
+[docs/PILOTO.md](docs/PILOTO.md). Funciona com DVR Intelbras (câmeras HDCVI, como a VHL 1120 B, pelo
+canal do DVR) e com câmeras IP.
+
 ## Início rápido (modo demonstração, sem serviços externos)
 
 Requisitos: Python 3.11+ e FFmpeg/FFprobe no PATH.

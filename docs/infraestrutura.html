@@ -1,0 +1,275 @@
+<title>Infraestrutura Replay Shape</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: coluna de leitura única, blocos de decisão em "mesas" (feltro + madeira) só onde há escolha. Tema escuro fixo da marca. */
+:root {
+  --bg: #0c100d;
+  --panel: #141b16;
+  --panel-2: #1a231d;
+  --line: #2a352d;
+  --fg: #eef3ee;
+  --muted: #9faea2;
+  --soft: #c8d3ca;
+  --lime: #a3e635;
+  --lime-ink: #10200a;
+  --felt: #0f5132;
+  --felt-2: #0a3a24;
+  --wood: #6b4220;
+  --amber: #f5b83d;
+  --red: #f87171;
+  --display: "Archivo", "Segoe UI", system-ui, sans-serif;
+  --body: "Inter", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font: 16px/1.6 var(--body); }
+.wrap { max-width: 860px; margin: 0 auto; padding-block: 40px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: 24px; font-weight: 800; margin-top: 8px; }
+h3 { font-size: 18px; font-weight: 700; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--lime); }
+.eyebrow { font: 600 12px/1 var(--body); letter-spacing: .14em; text-transform: uppercase; color: var(--lime); }
+.lede { font-size: 19px; color: var(--soft); }
+section { display: flex; flex-direction: column; gap: 14px; padding-top: 44px; }
+header { display: flex; flex-direction: column; gap: 14px; }
+.meta { color: var(--muted); font-size: 14px; }
+.muted { color: var(--muted); }
+.small { font-size: 14px; }
+code, .mono { font-family: var(--mono); font-size: .9em; }
+
+/* Resposta curta: o bloco em destaque da página */
+.answer { border-radius: 30px; padding: 12px;
+  background: repeating-linear-gradient(95deg, #6b4220 0 7px, #4a2c14 7px 9px, #8b5a2b 9px 12px, #6b4220 12px 18px); }
+.answer .felt { border-radius: 20px; padding: 24px 22px;
+  background: radial-gradient(140% 120% at 50% 0%, var(--felt) 0%, var(--felt-2) 75%); display: flex; flex-direction: column; gap: 12px; }
+.answer p { color: #e3ece4; }
+.answer strong { color: #fff; }
+
+ol.flow { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: f; }
+ol.flow li { counter-increment: f; display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: start;
+  padding: 12px 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; }
+ol.flow li::before { content: counter(f); width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+  font: 700 15px var(--display); color: #111; background: radial-gradient(circle at 50% 50%, #fff 0 36%, transparent 37%), radial-gradient(circle at 35% 30%, #fde047, #ca8a04); }
+ol.flow li:nth-child(2)::before { background: radial-gradient(circle at 50% 50%, #fff 0 36%, transparent 37%), radial-gradient(circle at 35% 30%, #60a5fa, #1d4ed8); }
+ol.flow li:nth-child(3)::before { background: radial-gradient(circle at 50% 50%, #fff 0 36%, transparent 37%), radial-gradient(circle at 35% 30%, #f87171, #b91c1c); }
+ol.flow li:nth-child(4)::before { background: radial-gradient(circle at 50% 50%, #fff 0 36%, transparent 37%), radial-gradient(circle at 35% 30%, #c084fc, #7e22ce); }
+ol.flow li:nth-child(5)::before { background: radial-gradient(circle at 50% 50%, #fff 0 36%, transparent 37%), radial-gradient(circle at 35% 30%, #fb923c, #c2410c); }
+ol.flow li:nth-child(6)::before { background: radial-gradient(circle at 50% 50%, #fff 0 36%, transparent 37%), radial-gradient(circle at 35% 30%, #4ade80, #15803d); }
+ol.flow li:nth-child(7)::before { background: radial-gradient(circle at 50% 50%, #fff 0 36%, transparent 37%), radial-gradient(circle at 35% 30%, #a16207, #713f12); }
+ol.flow li > div { min-width: 0; }
+ol.flow b { font-family: var(--display); }
+
+.diagram { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 12px; overflow-x: auto; }
+.diagram pre { margin: 0; }
+
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); }
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { font: 600 12px/1.3 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: var(--panel-2); }
+td.num, th.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+tr.total td { font-weight: 700; color: #fff; background: var(--panel-2); }
+
+.options { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.opt { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.opt.pick { border: 2px solid var(--lime); }
+.opt ul { margin: 0; padding-left: 18px; color: var(--soft); font-size: 15px; display: grid; gap: 4px; }
+.tag { align-self: flex-start; font: 700 11px/1 var(--body); letter-spacing: .08em; text-transform: uppercase; padding: 6px 9px; border-radius: 999px; }
+.tag.go { background: var(--lime); color: var(--lime-ink); }
+.tag.later { background: #233325; color: var(--lime); }
+.tag.no { background: #3a1818; color: var(--red); }
+.price { font: 800 22px/1.1 var(--display); }
+.price small { font: 500 13px var(--body); color: var(--muted); }
+
+.src { display: inline-block; font: 700 10px/1 var(--body); letter-spacing: .06em; text-transform: uppercase; padding: 3px 6px; border-radius: 5px; margin-left: 6px; vertical-align: 2px; }
+.src.of { background: #1f3b24; color: var(--lime); }
+.src.est { background: #3b2f0d; color: var(--amber); }
+.src.med { background: #1e2b3d; color: #93c5fd; }
+
+.checklist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.checklist li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 10px 12px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line); }
+.checklist li::before { content: ""; width: 16px; height: 16px; margin-top: 4px; border: 2px solid var(--lime); border-radius: 4px; }
+.checklist li.done::before { background: var(--lime); }
+.note { border-left: 3px solid var(--amber); padding: 10px 14px; background: #1e1a0f; border-radius: 0 10px 10px 0; color: #f3e6c4; font-size: 15px; }
+footer { padding-top: 48px; color: var(--muted); font-size: 13px; display: grid; gap: 6px; }
+footer ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+@media (max-width: 520px) { th, td { padding: 9px 10px; } .answer .felt { padding: 20px 16px; } }
+</style>
+
+<div class="wrap">
+<header>
+  <span class="eyebrow">Replay Shape · relatório de infraestrutura</span>
+  <h1>O que é preciso para o botão do celular salvar o replay</h1>
+  <p class="lede">Equipamentos, onde hospedar, quanto custa e o que falta para ir do modo demonstração ao primeiro estabelecimento de verdade.</p>
+  <p class="meta">27/11/2026 · Valores marcados <span class="src of">oficial</span> vêm do site do fornecedor, <span class="src med">medido</span> vêm dos testes do projeto e <span class="src est">estimado</span> são premissas para conferir.</p>
+</header>
+
+<section>
+  <div class="answer"><div class="felt">
+    <span class="eyebrow">Resposta curta</span>
+    <p><strong>O celular não manda a câmera começar a gravar.</strong> A câmera já grava o tempo todo para um computador pequeno instalado no estabelecimento, que guarda só os últimos 2 minutos. O toque no app envia apenas um pedido: “recorte os 60 segundos antes deste momento”. O computador corta o trecho, o cliente paga o Pix e baixa ou compartilha o vídeo.</p>
+    <p>Por isso o recorte pega o lance que <strong>já aconteceu</strong>, e não é preciso abrir a câmera para a internet.</p>
+    <p><strong>Para começar:</strong> o computador do próprio estabelecimento, ligado na rede do DVR, roda tudo. Câmeras, DVR, computador e energia são do estabelecimento. Do seu lado ficam a Cloudflare (gratuita), o domínio (opcional, ≈ R$ 40/ano) e a taxa do Pix (0,99% por venda). <strong>Seu custo fixo pode ser zero</strong> no piloto.</p>
+  </div></div>
+</section>
+
+<section>
+  <span class="eyebrow">Como a mensagem percorre o sistema</span>
+  <h2>Do toque no celular ao vídeo salvo</h2>
+  <ol class="flow">
+    <li><div><b>Câmera gravando sempre.</b> As câmeras continuam gravando no DVR como hoje. Câmeras analógicas HDCVI (como a VHL 1120 B, 720p) não têm IP: o computador lê o vídeo pelo canal do DVR, com uma conexão extra de leitura (RTSP), e guarda os últimos ~120 s em pedaços de 2 s, apagando o resto.</div></li>
+    <li><div><b>Cliente toca em “Gerar meu replay”.</b> O celular abriu o app pelo QR Code da quadra/mesa, que já identifica a câmera certa. O botão envia um pedido HTTPS pela internet.</div></li>
+    <li><div><b>O pedido chega ao mini-PC pelo túnel.</b> O mini-PC mantém uma conexão de saída com a Cloudflare (Cloudflare Tunnel). O pedido entra por ela, sem abrir portas no roteador e sem expor câmera.</div></li>
+    <li><div><b>Recorte dos últimos 60 s.</b> O horário do toque define o trecho. O FFmpeg junta os pedaços, corta, gera um MP4 de ~11 MB e confere o arquivo. Nos testes isso levou cerca de 5 s.</div></li>
+    <li><div><b>Pix.</b> O app mostra o QR e o copia e cola do Mercado Pago. Quando o banco confirma, o Mercado Pago avisa o servidor (webhook), e o servidor confere o pagamento direto com o Mercado Pago.</div></li>
+    <li><div><b>Liberação.</b> O app recebe um link temporário (15 min, renovável). O cliente assiste, baixa ou compartilha no WhatsApp. O vídeo fica disponível por 24 h.</div></li>
+    <li><div><b>Exclusão automática.</b> Vídeos não pagos somem em 30 min, e os pagos em 24 h. Nada fica numa galeria pública.</div></li>
+  </ol>
+  <div class="diagram">
+<pre class="mermaid">
+flowchart LR
+  subgraph LOCAL["Estabelecimento (rede local)"]
+    CAM["Câmeras VHL 1120 B"] -- "coaxial" --> DVR["DVR Intelbras"]
+    DVR -- "RTSP (só leitura)" --> PC["PC do local ou mini-PC<br/>buffer 120 s + recorte"]
+  end
+  PC -- "túnel de saída" --> CF["Cloudflare<br/>Tunnel + domínio"]
+  CEL["Celular do cliente<br/>(QR Code da mesa)"] -- "HTTPS" --> CF
+  MP["Mercado Pago<br/>Pix"] -- "webhook" --> CF
+  PC -. "opcional: vídeos pagos" .-> R2["Cloudflare R2"]
+</pre>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow">Onde hospedar</span>
+  <h2>Três caminhos, um para começar</h2>
+  <div class="options">
+    <div class="opt pick">
+      <span class="tag go">Começar por aqui</span>
+      <h3>A · Tudo no PC do local + Cloudflare Tunnel</h3>
+      <p class="price">R$ 0<small> /mês para você (+ taxa do Pix)</small></p>
+      <ul>
+        <li>App, painel, banco, buffer e recorte rodam no computador do estabelecimento (ou num mini-PC, se o local preferir um aparelho dedicado).</li>
+        <li>O PC precisa ficar ligado, sem suspender, e na mesma rede do DVR. O iniciador do piloto já impede a suspensão.</li>
+        <li>Cloudflare Tunnel publica o app num domínio próprio com HTTPS.</li>
+        <li>É exatamente como o código atual funciona (o Cenário A/B do repositório).</li>
+        <li>Ponto fraco: se a internet do local cair, o app fica fora do ar ali.</li>
+      </ul>
+    </div>
+    <div class="opt">
+      <span class="tag later">A partir de 3–5 locais</span>
+      <h3>B · Mini-PC (Edge) + servidor central</h3>
+      <p class="price">+ R$ 30–60<small> /mês (VPS em São Paulo)</small></p>
+      <ul>
+        <li>App, Pix e painel num VPS central; cada mini-PC só grava e recorta.</li>
+        <li>O mini-PC conecta para fora e busca os pedidos (continua sem portas abertas).</li>
+        <li>Vídeos pagos sobem para o R2 e são entregues de lá.</li>
+        <li>Exige separar o “agente Edge” no código (descrito no ROADMAP).</li>
+      </ul>
+    </div>
+    <div class="opt">
+      <span class="tag no">Não recomendado</span>
+      <h3>C · Tudo na nuvem</h3>
+      <p class="price">≈ R$ 90+<small> /câmera/mês (estimado)</small></p>
+      <ul>
+        <li>Cada câmera enviaria vídeo 24 h por dia para um servidor.</li>
+        <li>Exige upload dedicado de vários Mbps por câmera, que a maioria dos locais não tem.</li>
+        <li>Paga para guardar e processar horas de vídeo que ninguém vai comprar.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="note">A Cloudflare Pages (onde está a demo) hospeda só a parte visual. Ela não roda o recorte de vídeo, nem o Pix, nem o painel. Esses precisam de um computador ligado: o mini-PC (A) ou um VPS (B).</p>
+</section>
+
+<section>
+  <span class="eyebrow">Equipamento no estabelecimento</span>
+  <h2>O que precisa existir no local</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Item</th><th>Para quê</th><th class="num">Quem paga</th></tr></thead>
+    <tbody>
+      <tr><td>Câmeras VHL 1120 B + DVR Intelbras</td><td>Já existentes. O DVR precisa estar com RTSP habilitado (padrão na maioria).</td><td class="num">Estabelecimento</td></tr>
+      <tr><td>Computador com Windows 10/11, 4 GB de RAM livres, 5 GB de disco</td><td>Roda o Replay Shape. Precisa ficar ligado e na mesma rede do DVR, de preferência por cabo.</td><td class="num">Estabelecimento</td></tr>
+      <tr><td>Energia e internet</td><td>As já existentes. Cada venda envia ~3–11 MB.</td><td class="num">Estabelecimento</td></tr>
+      <tr><td>Placas com QR Code (uma por quadra/mesa)</td><td>O cliente abre o app já na câmera certa. O painel gera o QR.</td><td class="num">R$ 20 – 60 cada <span class="src est">est.</span></td></tr>
+      <tr><td>Mini-PC dedicado (opcional)</td><td>Só se o computador do local não puder ficar ligado o tempo todo. N100, 16 GB, 512 GB.</td><td class="num">R$ 1.870 – 2.940 <span class="src of">loja</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted small">No DVR, o ideal é: stream principal em H.264, compressão inteligente (H.264+/H.265+) desligada e intervalo de I-frame igual ao FPS. O assistente <code>configurar_camera.bat</code> mede isso e avisa. O limite de conexões simultâneas do DVR não está publicado de forma clara e precisa ser observado no teste (ver <code>docs/PILOTO.md</code>).</p>
+</section>
+
+<section>
+  <span class="eyebrow">Custos recorrentes</span>
+  <h2>Quanto custa por mês para você</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Item</th><th>Observação</th><th class="num">Mensal</th></tr></thead>
+    <tbody>
+      <tr><td>Domínio .com.br (opcional no piloto)</td><td>≈ R$ 40 por ano, dividido em 12. No piloto dá para usar o link temporário gratuito da Cloudflare.</td><td class="num">R$ 0 – 3,50 <span class="src est">est.</span></td></tr>
+      <tr><td>Cloudflare Tunnel + Pages + DNS</td><td>Planos gratuitos. Confirmar os termos atuais do Zero Trust.</td><td class="num">R$ 0 <span class="src est">est.</span></td></tr>
+      <tr><td>Cloudflare R2 (só na opção B)</td><td>US$ 0,015/GB-mês, 10 GB grátis, sem custo de download. Vídeos pagos ficam 24 h, então o volume fica dentro da faixa grátis.</td><td class="num">≈ R$ 0 <span class="src of">oficial</span></td></tr>
+      <tr><td>VPS em São Paulo (só na opção B)</td><td>2 vCPU, 4–8 GB. Um servidor atende vários estabelecimentos.</td><td class="num">R$ 30 – 60 <span class="src est">anúncios</span></td></tr>
+      <tr class="total"><td>Total fixo para você (opção A)</td><td></td><td class="num">R$ 0 – 3,50</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Por venda de R$ 5,00</h3>
+  <div class="table-wrap"><table>
+    <tbody>
+      <tr><td>Taxa Pix Mercado Pago (0,99%, recebimento na hora)</td><td class="num">R$ 0,05 <span class="src of">oficial</span></td></tr>
+      <tr><td>Armazenamento e tráfego do vídeo</td><td class="num">≈ R$ 0,00</td></tr>
+      <tr class="total"><td>Sobra antes do repasse ao estabelecimento</td><td class="num">≈ R$ 4,95</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted small">A taxa do Mercado Pago varia por perfil de vendedor, e contas novas podem receber em 7 dias até liberar o recebimento na hora. Os R$ 0,99% devem ser confirmados no contrato. Para simular outros cenários (preço, conversão, repasse), use o Simulador financeiro do painel admin.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Capacidade</span>
+  <h2>O que o computador do local aguenta</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Ponto</th><th>Número</th></tr></thead>
+    <tbody>
+      <tr><td>Tempo para gerar um replay de 60 s em 720p</td><td>≈ 5,3 s no notebook de teste (i7-8750H) <span class="src med">medido</span>. Num PC de escritório simples deve ficar entre 10 e 20 s <span class="src est">est.</span></td></tr>
+      <tr><td>Processamento contínuo</td><td>Guardar o buffer não recodifica o vídeo: o uso de CPU é baixo, mesmo com várias câmeras de 720p.</td></tr>
+      <tr><td>Disco usado pelo buffer</td><td>~30–60 MB por câmera (120 s). Oito câmeras usam menos de 0,5 GB.</td></tr>
+      <tr><td>Disco por replay</td><td>≈ 11 MB (720p, 1,5 Mbps). 300 replays guardados ≈ 3,3 GB.</td></tr>
+      <tr><td>Replays ao mesmo tempo</td><td>2 em paralelo por padrão; os demais esperam na fila. Configurável.</td></tr>
+      <tr><td>Download no celular</td><td>11 MB carregam em poucos segundos no 4G. O vídeo começa a tocar antes de baixar tudo.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Nenhum desses números foi medido com o DVR e as câmeras VHL 1120 B reais. Esse teste é o primeiro passo do piloto.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Próximos passos</span>
+  <h2>Do modo demonstração ao primeiro local</h2>
+  <ul class="checklist">
+    <li class="done"><div>App, recorte real, Pix simulado, painel e exclusão automática funcionando (57 testes passando).</div></li>
+    <li class="done"><div>Versão piloto para Windows: assistente que encontra o DVR, testa os canais e cadastra a câmera; iniciador com acesso pelo Wi-Fi ou link HTTPS temporário (<code>docs/PILOTO.md</code>).</div></li>
+    <li><div>Rodar o piloto no PC do local com 1 câmera VHL 1120 B: RTSP do DVR, horário do OSD batendo com o toque, estabilidade por algumas horas.</div></li>
+    <li><div>Registrar o domínio e ligar um Cloudflare Tunnel fixo apontando para o PC do local.</div></li>
+    <li><div>Criar a conta de vendedor no Mercado Pago, testar o Pix com credenciais de teste e depois em produção com um valor baixo.</div></li>
+    <li><div>Imprimir os QR Codes e fazer um piloto de 2 semanas numa quadra/mesa, testando em iPhone e Android reais.</div></li>
+    <li><div>Validar com um advogado o aviso de gravação, a política de privacidade e o tratamento de menores (LGPD).</div></li>
+    <li><div>A partir do 3º–5º estabelecimento, separar o agente Edge e mover app e Pix para um VPS (opção B).</div></li>
+  </ul>
+</section>
+
+<footer>
+  <span>Fontes consultadas</span>
+  <ul>
+    <li><a href="https://developers.cloudflare.com/r2/pricing/" target="_blank" rel="noopener">Cloudflare R2 — preços</a> (US$ 0,015/GB-mês, classe A US$ 4,50/milhão, egress sem cobrança, 10 GB grátis)</li>
+    <li><a href="https://www.mercadopago.com.br/ferramentas-para-vender/check-out" target="_blank" rel="noopener">Mercado Pago — checkouts e taxas</a> (Pix 0,99%; página sem data)</li>
+    <li><a href="https://www.mercadopago.com.br/developers/pt/support/taxas-de-servico-para-transacoes_37740" target="_blank" rel="noopener">Mercado Pago — taxas de serviço</a></li>
+    <li><a href="https://www.magazineluiza.com.br/busca/beelink+mini+pc/" target="_blank" rel="noopener">Magazine Luiza — mini-PCs N100</a> (preços de busca; variam)</li>
+    <li><a href="https://cybernews.com/br/melhor-hospedagem-de-sites/provedores-de-vps-baratos/" target="_blank" rel="noopener">Cybernews — VPS no Brasil</a> e <a href="https://valebyte.com/en/vps/brazil/?city=S%C3%A3o+Paulo" target="_blank" rel="noopener">Valebyte — VPS em São Paulo</a></li>
+    <li><a href="https://blog.cloudflare.com/cloudflares-commitment-to-free" target="_blank" rel="noopener">Cloudflare — compromisso com o plano gratuito</a> (Tunnel; confirmar os termos atuais do Zero Trust)</li>
+    <li><a href="https://www.smartrtsp.com/pt-br/guides/compatibilidade-intelbras-nvr-onvif" target="_blank" rel="noopener">Compatibilidade RTSP Intelbras</a> (fonte de terceiros)</li>
+  </ul>
+  <span>Estimativas de energia, nobreak, domínio, placas e desempenho no N100 são premissas e não cotações.</span>
+</footer>
+</div>

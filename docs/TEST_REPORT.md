@@ -7,7 +7,7 @@ FFmpeg 9.1 (gyan.dev), Chromium do painel do Claude desktop.
 
 ```
 .venv\Scripts\python -m pytest -q
-57 passed in 71.69s
+62 passed in 88.93s   (atualizado com os testes do piloto)
 ```
 
 Os testes usam **FFmpeg real**. Para medir a precisão do recorte sem OCR, a fonte de teste codifica
@@ -46,6 +46,18 @@ do replay e compara com o intervalo esperado.
 | Produção bloqueia demo/mock | `test_production_refuses_mock_and_demo` | ✅ |
 | Mercado Pago (formato de requisição, mapeamento, assinatura) | `test_mp_*`, **contra respostas simuladas** | ✅ (sem API real) |
 | S3/R2 SigV4 | `test_s3_presign_matches_aws_reference_vector` (vetor oficial AWS) | ✅ |
+
+| Piloto: URLs de canal do DVR, classificação de erros, senha mascarada | `test_candidate_urls_dvr_channel_and_escaping`, `test_error_classification_and_redaction` | ✅ |
+| Piloto: assistente com aparelho inexistente | `test_wizard_reports_unreachable_device`, `test_probe_unreachable_host_fails_fast` | ✅ |
+| Buffer com GOP longo (espera adaptativa) | `test_buffer_waits_longer_with_long_gop` | ✅ |
+
+### Piloto (`iniciar_piloto.py --local`), testado neste PC
+Com uma câmera simulada cadastrada no banco do piloto: `demo_mode=false`, `/demo/spots` → 404, a
+página da quadra acessível pelo **IP da rede local** (192.168.x), o buffer encheu e o replay foi
+gerado (`awaiting_payment`). Durante o teste, corrigi a escolha do IP: um adaptador virtual (WSL,
+172.19.x) aparecia antes do IP da rede Wi-Fi.
+**Não testado:** DVR/câmera real (sem equipamento), modo internet (o cloudflared não está instalado
+neste PC) e os arquivos `.bat` executados por duplo clique.
 
 ### Falhas encontradas e corrigidas durante os testes
 1. A fixture injetava segmentos que terminavam **antes** do acionamento, o que dava `BUFFER_TIMEOUT`.

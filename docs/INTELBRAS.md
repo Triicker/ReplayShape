@@ -3,6 +3,10 @@
 > **Nada neste guia foi testado em equipamento Intelbras real** (não havia equipamento disponível).
 > Os padrões abaixo são os mais comuns e **precisam ser validados** em cada modelo/firmware.
 
+> **Câmeras analógicas (HDCVI), como a VHL 1120 B (720p):** não têm IP. O sistema lê o vídeo pelo
+> **DVR**, no canal em que a câmera está ligada. O assistente `configurar_camera.bat` encontra o DVR,
+> testa os canais e mostra uma foto de cada um (ver [PILOTO.md](PILOTO.md)).
+
 ## 1. Pré-requisitos no equipamento
 1. Câmera IP ou NVR/DVR na **mesma rede local** do Edge (mini-PC). **Não** faça redirecionamento de
    portas para a internet.
