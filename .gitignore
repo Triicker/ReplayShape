@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+
+# Runtime data (banco, buffers, replays, chaves geradas) — NUNCA versionar
+data/
+*.db
+*.db-wal
+*.db-shm
+*.mp4
+*.ts
+*.m4s
+!demo/static/assets/sample-replay.mp4
+
+# Segredos
+.env
+.env.*
+!.env.example
+secret.key
+firmware/esp32/replay_button/config.h
+
+# Build
+dist/
+node_modules/
+.wrangler/
+
+# SO / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
